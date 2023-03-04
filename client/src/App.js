@@ -30,9 +30,9 @@ function App() {
 
   return (<>
     <Router>
+    <Rooms socket={socket}/>
       <Routes>
-        <Route path='/' element={<Rooms socket={socket}/>}/>
-        <Route path='/room/:name' element={<Room socket={socket}/>}/>
+        <Route path='/:name' element={<Room socket={socket}/>}/>
       </Routes>
     </Router>
   </>);

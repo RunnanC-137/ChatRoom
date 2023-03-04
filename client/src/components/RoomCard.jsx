@@ -4,7 +4,7 @@ export default function RoomCard({color, title}){
     return (
         <Card
         as={Link}
-        to={title !== "sem salas" ? `room/${title}` : "/"}
+        to={title !== "sem salas" ? `/${title}` : "/"}
         bg={color}
         text={color === 'success' ? 'white' : 'dark' }
         style={{ width: '18rem' }}

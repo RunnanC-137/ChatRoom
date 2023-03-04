@@ -1,59 +1,28 @@
 require("dotenv").config()
-const
-    express = require("express"),
-    path = require("path"),
-    cors = require("cors"),
-    { createServer } = require("http"),
-    socket = require("socket.io");
+const express = require("express")
+const { createServer } = require("http")
+const { Server } = require("socket.io")
+const cors = require("cors")
+const path = require("path")
 
-const 
-    PORT = process.env.PORT || "5000",
-    messagesList = {public: new Array()},
-    usersList = new Array(),
-    roomsList = new Array()
+const PORT = process.env.PORT || "5000"
 
-const 
-    app = express(),
-    httpServer = createServer(app),
-    io = socket(httpServer, {
-        cors: {
-          origin: "http://192.168.100.21:3000",
-          credentials: true
-        }
-      }) // io
+const app = express()
+const httpServer = createServer(app)
+const io = new Server(httpServer, {
+    cors: {
+      origins: ["http://192.168.100.21:3000", "http://localhost:3000"],
+      methods: ["GET", "POST"],
+      credentials: true
+    }
+  });
 
 app.use(cors())
+
+require("./socket")(io)
+
 if(process.env.NODE_ENV !== "development")
     app.use(express.static(path.join(__dirname, "public")))
-
-io.on("connection", startSocket)
-
-function startSocket(socket) {
-
-    socket.emit("rooms", roomsList)
-
-    socket.on("new room", room => {
-        roomsList.push(room.nome)
-        createRoom(room.nome)
-        io.emit("rooms", roomsList)
-    })
-}
-
-function createRoom(name) {
-
-    const room = io.of(`/${name}`)
-    messagesList[name] = new Array()
-    //app.use(`/${name}`, express.static(path.join(__dirname, "public", "rooms")))
-    room
-    .on("connection", socket => {
-        socket.emit("new messages", messagesList[name])
-        socket.on("user message", message => {
-            messagesList[name].push(message)
-            usersList.push({usuario: message.usuario, id:message.id})
-            room.emit("new messages", messagesList[name])
-        })
-    })
-}
 
 httpServer
 .listen(PORT, err => {

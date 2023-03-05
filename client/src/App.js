@@ -30,7 +30,7 @@ function App() {
 
   return (<>
     <Router>
-    <Rooms socket={socket}/>
+      <Rooms socket={socket}/>
       <Routes>
         <Route path='/:name' element={<Room socket={socket}/>}/>
       </Routes>

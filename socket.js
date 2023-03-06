@@ -4,18 +4,19 @@ module.exports = (io) => {
 
         console.log('user conected');
 
-        socket.emit("rooms", Rooms.map(room => room.name))
+        socket.emit("rooms", Rooms)
 
         /* socket.on('leave', (room) => {
             socket.leave(room.name);
             console.log(`User left room: ${room}`);
         });
          */
+        socket.on('rooms', () => socket.emit("rooms", Rooms));
         socket.on("newRoom", roomName => {
             const room = Rooms.filter(room => room.name === roomName)[0]
             if(!room)
                 Rooms.push({name:roomName, messages:[]})
-            socket.emit("rooms", Rooms.map(room => room.name))
+            socket.emit("rooms", Rooms)
         })
         socket.on("joinRoom", roomName => {
             console.log(`user joined room ${roomName}`);
@@ -30,6 +31,7 @@ module.exports = (io) => {
             room.messages.push(message)
             console.log(Rooms[0])
             //Users.push({usuario: message.usuario, id:message.id})
+            socket.emit("rooms", Rooms)
             io.to(roomName).emit("messages", room.messages)
         })
         

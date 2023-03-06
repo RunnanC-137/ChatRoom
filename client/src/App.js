@@ -4,9 +4,10 @@ import {
   Routes, 
   Route 
 } from "react-router-dom"
-import Rooms from './pages/Rooms';
+import RoomsLits from './pages/RoomsLits';
 import Room from './pages/Room';
 import { io } from 'socket.io-client';
+import { Col, Row } from 'react-bootstrap';
 
 const socket = io("http://192.168.100.21:3333");
 
@@ -28,14 +29,23 @@ function App() {
     };
   }, []);
 
-  return (<>
+  return (<div>
+    
     <Router>
-      <Rooms socket={socket}/>
-      <Routes>
-        <Route path='/:name' element={<Room socket={socket}/>}/>
-      </Routes>
+      <Row  className="m-0">
+        <Col sm={3} className="p-0">
+          <RoomsLits socket={socket}/>
+        </Col>
+        <Col sm={9}  className="p-0">
+          <Routes  >
+            <Route path='/:name' element={<Room socket={socket}/>}/>
+          </Routes>
+        </Col>
+        
+      </Row>
+      
     </Router>
-  </>);
+  </div>)
 }
 
 export default App;

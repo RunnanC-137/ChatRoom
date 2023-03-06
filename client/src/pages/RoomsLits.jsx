@@ -45,26 +45,45 @@ export default function Rooms({ socket }){
             return newName
         } else return string
     }
-    return(<>
-    <RoomsList roomsList={roomsList}/>
-    <div>
-
-    
-    <Container className='position-absolute bg-secondary text-light p-3' style={{bottom: "0px", maxWidth: "100%"}}>
-        <Form onSubmit={createRoom} style={{maxWidth:"500px"}}>
-            <Form.Group className="mb-3" controlId="formRoom">
-                <Form.Label as="h4">Room</Form.Label>
-                <div className='d-flex justify-content-around'>
-                    <Form.Control type="text" name='room' placeholder="Room name" style={{ maxWidth:"70%" }} required onChange={(event)=>setRoomName(event.target.value)} value={roomName} />
-                    <Button variant="primary " type="submit">
-                    Submit
-                    </Button>
+    return(<div style={{ height:"100vh"}} className="d-flex flex-column">
+        <div className='bg-secondary' style={{height: "10%"}}>
+            <Container className='d-flex py-3' style={{height: "100%"}}>
+                <div className='bg-primary align-self-stretch rounded-circle d-flex justify-content-center text-white' style={{width: "40px"}}>
+                    <h4 className='m-0 my-auto'>U</h4>
                 </div>
-            </Form.Group>
-            <Form.Group className="mb-3" controlId="formBasicCheckbox">
-            <Form.Check type="checkbox" label="Privar sala" name="private"/>
+                <h3 className='ps-5 m-0'>User name</h3>
+            </Container>
+        </div>
+        <div className='bg-primary' style={{height: "10%"}}>
+                <CreateRoomForm 
+                createRoom={createRoom} 
+                roomName={roomName} 
+                setRoomName={setRoomName}/>
+        </div>
+        <div className='bg-success ' style={{height: "80%"}}>
+            <Container className='p-4'>
+                <RoomsList roomsList={roomsList}/>
+            </Container>
+        </div>
+    </div>)
+}
+
+function CreateRoomForm({ createRoom, setRoomName, roomName }){
+    return(<>
+        <Form onSubmit={createRoom} >
+            <Form.Group controlId="formRoom" className="d-flex align-items-center justify-content-between p-3">
+                    <Form.Control 
+                    type="text" 
+                    name='room' 
+                    placeholder="Room name" 
+                    required 
+                    onChange={(event)=>setRoomName(event.target.value)} 
+                    value={roomName} 
+                    style={{maxWidth: "50%"}}/>
+                    <Button variant="secondary " type="submit">
+                    Create a room
+                    </Button>
             </Form.Group>
         </Form>
-    </Container></div>
     </>)
 }

@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { Button, Container, Form } from 'react-bootstrap';
+import { Button, Form } from 'react-bootstrap';
 import { useParams } from "react-router-dom"
 import MessagesList from "../components/MessagesList";
 
@@ -27,25 +27,31 @@ export default function Room({socket}){
         socket.emit("newMessage", { message, roomName:name })
         setMessage("")
     }
-    return(<>
-        <MessagesList messageList={messages}/>
-        <div>
-        <Container className='position-absolute bg-success text-light p-3' style={{bottom: "0px", maxWidth: "100%"}}>
-            <Form onSubmit={sendMessage} style={{maxWidth:"500px"}}>
-                <Form.Group className="mb-3" controlId="formRoom">
-                    <Form.Label as="h4">Send a message</Form.Label>
-                    <div className='d-flex justify-content-around'>
-                        <Form.Control type="text" name='room' placeholder="Room name" style={{ maxWidth:"70%" }} required onChange={(event)=>setMessage(event.target.value)} value={message} />
-                        <Button variant="primary " type="submit">
-                        Submit
-                        </Button>
-                    </div>
-                </Form.Group>
-                <Form.Group className="mb-3" controlId="formBasicCheckbox">
-                <Form.Check type="checkbox" label="Privar sala" name="private"/>
-                </Form.Group>
-            </Form>
-        </Container>
+    return(<div className="d-flex flex-column" style={{height:"100%"}}>
+        <div className="p-3 d-flex flex-column align-items-start" style={{height:"90%"}}>
+            <MessagesList messageList={messages}/>
         </div>
-    </>)
+        <div className="bg-info" style={{height:"10%"}}>
+            <SendMessageForm sendMessage={sendMessage} message={message} setMessage={setMessage} />
+        </div>
+    </div>)
+}
+
+function SendMessageForm({sendMessage, message, setMessage }){
+    return <Form onSubmit={sendMessage} style={{height:"100%"}}>
+        <Form.Group className="mb-3 d-flex align-items-center justify-content-evenly" controlId="formRoom" style={{width:"100%", height:"100%"}}>
+                <Form.Control
+                type="text" 
+                name='room' 
+                className=""
+                placeholder="Room name" 
+                style={{ maxWidth:"85%" }}
+                required 
+                onChange={(event)=>setMessage(event.target.value)} 
+                value={message} />
+                <Button variant="primary " type="submit">
+                Send
+                </Button>
+        </Form.Group>
+    </Form>
 }
